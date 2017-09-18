@@ -22,6 +22,7 @@ try:
     #Function to call on new thread
     #Because of race conditions, this needs to be done quickly or on diff thread
     def send_msg(opened:bool):
+        if not opened: return #Least-work way to disable the "closed" message
         #Replace args with your email provider's SMTP details
         server = smtplib.SMTP( "smtp.gmail.com", 587 )
         server.starttls()
@@ -59,11 +60,11 @@ try:
             #Negate next_state
             next_state = not next_state
         time.sleep(0.3)
-        
+
 except KeyboardInterrupt:
     GPIO.cleanup() #For Keyboard Interrupt exit
     need_clean = False
 
-if need_clean:    
+if need_clean:
     GPIO.cleanup() #For normal exit
 print('\nEnd!')
